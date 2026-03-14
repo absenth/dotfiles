@@ -1,0 +1,108 @@
+---
+- name: macOS Development Setup
+  hosts: localhost
+  connection: local
+  become: false
+
+  tasks:
+    - name: Check if Homebrew is installed
+      command: which brew
+      register: brew_check
+      changed_when: false
+      failed_when: false
+
+    - name: Install Homebrew
+      shell: |
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      when: brew_check.rc != 0
+
+    - name: Install Homebrew formulae
+      community.general.homebrew:
+        name:
+          - fd
+          - fzf
+          - ripgrep
+          - eza
+          - bat
+          - rust-analyzer
+          - gopls
+          - hyperfine
+          - bottom
+          - nmap
+          - node
+          - gh
+          - bob
+          - go
+          - uv
+        state: present
+      when: brew_check.rc == 0
+
+    - name: Install Homebrew casks (terminal)
+      community.general.homebrew_cask:
+        name: wezterm
+        state: present
+      when: brew_check.rc == 0
+      ignore_errors: yes
+
+    - name: Install Homebrew casks (browser)
+      community.general.homebrew_cask:
+        name: brave-browser
+        state: present
+      when: brew_check.rc == 0
+      ignore_errors: yes
+
+    - name: Install Homebrew casks (apps)
+      community.general.homebrew_cask:
+        name: raycast
+        state: present
+      when: brew_check.rc == 0
+      ignore_errors: yes
+
+    - name: Check if rustup is installed
+      command: which rustup
+      register: rustup_check
+      changed_when: false
+      failed_when: false
+
+    - name: Install rustup
+      shell: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+      when: rustup_check.rc != 0
+
+    - name: Check if Opencode is installed
+      command: which opencode
+      register: opencode_check
+      changed_when: false
+      failed_when: false
+
+    - name: Install Opencode
+      block:
+        - name: Get Opencode latest version
+          uri:
+            url: https://api.github.com/repos/opencodeai/opencode/releases/latest
+            return_content: yes
+          register: opencode_release
+
+        - name: Set opencode version fact
+          set_fact:
+            opencode_version: "{{ opencode_release.json.tag_name | regex_replace('^v', '') }}"
+            opencode_arch: "darwin-arm64"
+
+        - name: Download Opencode
+          get_url:
+            url: "https://github.com/opencodeai/opencode/releases/download/v{{ opencode_version }}/opencode-{{ opencode_version }}-{{ opencode_arch }}.tar.gz"
+            dest: "/tmp/opencode-{{ opencode_version }}-{{ opencode_arch }}.tar.gz"
+
+        - name: Extract Opencode
+          unarchive:
+            src: "/tmp/opencode-{{ opencode_version }}-{{ opencode_arch }}.tar.gz"
+            dest: /tmp
+            remote_src: yes
+
+        - name: Move Opencode to /usr/local/bin
+          command: mv /tmp/opencode /usr/local/bin/opencode
+
+        - name: Clean up Opencode tarball
+          file:
+            path: "/tmp/opencode-{{ opencode_version }}-{{ opencode_arch }}.tar.gz"
+            state: absent
+      when: opencode_check.rc != 0
