@@ -2,7 +2,12 @@
 - name: Linux Development Setup
   hosts: localhost
   connection: local
-  become: false
+  become: true
+
+  vars_prompt:
+    - name: become_password
+      prompt: "Enter sudo password"
+      private: yes
 
   tasks:
     - name: Detect Linux distribution
@@ -26,6 +31,7 @@
         - name: Install packages (Fedora/RHEL)
           ansible.builtin.dnf:
             name:
+              - zsh
               - fd-find
               - ripgrep
               - bat
@@ -74,6 +80,7 @@
         - name: Install packages (Debian/Ubuntu)
           ansible.builtin.apt:
             name:
+              - zsh
               - fd-find
               - ripgrep
               - bat
@@ -102,6 +109,7 @@
         - name: Install packages (Arch)
           ansible.builtin.pacman:
             name:
+              - zsh
               - fd
               - ripgrep
               - bat
@@ -135,6 +143,7 @@
         - name: Install packages (Alpine)
           community.general.apk:
             name:
+              - zsh
               - fd
               - ripgrep
               - bat
@@ -165,16 +174,19 @@
       register: rustup_check
       changed_when: false
       failed_when: false
+      become: false
 
     - name: Install rustup
       shell: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
       when: rustup_check.rc != 0
+      become: false
 
     - name: Check if Opencode is installed
       command: which opencode
       register: opencode_check
       changed_when: false
       failed_when: false
+      become: false
 
     - name: Install Opencode (x86_64)
       block:
@@ -209,3 +221,21 @@
             state: absent
       when: opencode_check.rc != 0
       ignore_errors: yes
+
+    - name: Check current shell
+      command: echo $SHELL
+      register: current_shell
+      changed_when: false
+      failed_when: false
+
+    - name: Add zsh to list of shells
+      lineinfile:
+        path: /etc/shells
+        line: /usr/bin/zsh
+        create: yes
+
+    - name: Change user shell to zsh
+      ansible.builtin.user:
+        name: "{{ ansible_facts['user_id'] }}"
+        shell: /usr/bin/zsh
+      when: current_shell.stdout != '/usr/bin/zsh'

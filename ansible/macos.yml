@@ -4,6 +4,11 @@
   connection: local
   become: false
 
+  vars_prompt:
+    - name: become_password
+      prompt: "Enter sudo password"
+      private: yes
+
   tasks:
     - name: Check if Homebrew is installed
       command: which brew
@@ -19,6 +24,7 @@
     - name: Install Homebrew formulae
       community.general.homebrew:
         name:
+          - zsh
           - fd
           - fzf
           - ripgrep
@@ -57,6 +63,37 @@
         state: present
       when: brew_check.rc == 0
       ignore_errors: yes
+
+    - name: Check current shell
+      command: echo $SHELL
+      register: current_shell
+      changed_when: false
+      failed_when: false
+
+    - name: Set user shell to zsh
+      become: true
+      community.general.macports:
+        name: zsh
+        state: present
+      when: current_shell.stdout != '/opt/homebrew/bin/zsh' and current_shell.stdout != '/usr/local/bin/zsh'
+      ignore_errors: true
+
+    - name: Add zsh to list of shells
+      become: true
+      lineinfile:
+        path: /etc/shells
+        line: /opt/homebrew/bin/zsh
+        create: yes
+      when: current_shell.stdout != '/opt/homebrew/bin/zsh' and current_shell.stdout != '/usr/local/bin/zsh'
+      ignore_errors: true
+
+    - name: Change user shell to zsh
+      become: true
+      ansible.builtin.user:
+        name: "{{ ansible_facts['user_id'] }}"
+        shell: /opt/homebrew/bin/zsh
+      when: current_shell.stdout != '/opt/homebrew/bin/zsh' and current_shell.stdout != '/usr/local/bin/zsh'
+      ignore_errors: true
 
     - name: Check if rustup is installed
       command: which rustup
