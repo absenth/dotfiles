@@ -122,13 +122,14 @@ install_ansible() {
 }
 
 run_ansible_playbook() {
-    COMMON_PLAYBOOK="$SCRIPT_DIR/ansible/common.yml"
+    CHEZMOI_ANSIBLE_DIR="$HOME/.local/share/chezmoi/ansible"
+    COMMON_PLAYBOOK="$CHEZMOI_ANSIBLE_DIR/common.yml"
     if [ -f "$COMMON_PLAYBOOK" ]; then
         echo "Running common Ansible playbook: $COMMON_PLAYBOOK"
         ansible-playbook "$COMMON_PLAYBOOK"
     fi
 
-    PLAYBOOK="$SCRIPT_DIR/ansible/${OS}.yml"
+    PLAYBOOK="$CHEZMOI_ANSIBLE_DIR/${OS}.yml"
     if [ -f "$PLAYBOOK" ]; then
         echo "Running Ansible playbook: $PLAYBOOK"
         ansible-playbook "$PLAYBOOK"
