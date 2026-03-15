@@ -178,6 +178,11 @@
       when: rustup_check.rc != 0
       become: false
 
+    - name: Install eza and bottom via cargo
+      shell: ~/.cargo/bin/cargo install eza bottom
+      become: false
+      ignore_errors: true
+
     - name: Check if Opencode is installed
       command: which opencode
       register: opencode_check
