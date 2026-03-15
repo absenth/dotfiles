@@ -12,6 +12,7 @@
   tasks:
     - name: Update package repository
       community.general.pkgng:
+        name: "*"
         update_cache: yes
 
     - name: Install packages

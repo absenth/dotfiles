@@ -53,7 +53,7 @@ install_ansible_macos() {
 install_ansible_freebsd() {
     if ! command -v ansible >/dev/null 2>&1; then
         echo "Installing Ansible on FreeBSD..."
-        pkg install py311-ansible
+        sudo pkg install py311-ansible
     fi
 }
 
