@@ -59,5 +59,7 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply absenth
 ## Testing
 
 Testing has only been performed on:
-- Ubuntu 24.04
+- ArchLinux
 - Fedora 42
+- FreeBSD 14 - problems with bob, but otherwise mostly working
+- Ubuntu 24.04
