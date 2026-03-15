@@ -183,38 +183,10 @@
       failed_when: false
       become: false
 
-    - name: Install Opencode (x86_64)
-      block:
-        - name: Get Opencode latest version
-          uri:
-            url: https://api.github.com/repos/opencodeai/opencode/releases/latest
-            return_content: yes
-          register: opencode_release
-
-        - name: Set opencode version fact
-          set_fact:
-            opencode_version: "{{ opencode_release.json.tag_name | regex_replace('^v', '') }}"
-            opencode_arch: "linux-x64"
-
-        - name: Download Opencode
-          get_url:
-            url: "https://github.com/opencodeai/opencode/releases/download/v{{ opencode_version }}/opencode-{{ opencode_version }}-{{ opencode_arch }}.tar.gz"
-            dest: "/tmp/opencode-{{ opencode_version }}-{{ opencode_arch }}.tar.gz"
-
-        - name: Extract Opencode
-          unarchive:
-            src: "/tmp/opencode-{{ opencode_version }}-{{ opencode_arch }}.tar.gz"
-            dest: /tmp
-            remote_src: yes
-
-        - name: Move Opencode to /usr/local/bin
-          command: mv /tmp/opencode /usr/local/bin/opencode
-
-        - name: Clean up Opencode tarball
-          file:
-            path: "/tmp/opencode-{{ opencode_version }}-{{ opencode_arch }}.tar.gz"
-            state: absent
+    - name: Install Opencode
+      shell: curl -fsSL https://opencode.ai/install | bash
       when: opencode_check.rc != 0
+      become: false
       ignore_errors: yes
 
     - name: Check current shell
