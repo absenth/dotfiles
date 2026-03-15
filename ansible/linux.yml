@@ -65,8 +65,6 @@
             state: present
           when: distro_id in ['fedora', 'rhel', 'centos', 'rocky', 'alma']
           ignore_errors: yes
-        - name: Install rust utils (Fedora)
-          ansible.builtin.command: cargo install eza bottom
       when: distro_id in ['fedora', 'rhel', 'centos', 'rocky', 'alma'] or 'rhel' in distro_id_like
 
     - name: Install packages on Debian/Ubuntu
