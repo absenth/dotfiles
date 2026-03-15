@@ -96,7 +96,6 @@
               - htop
               - hyperfine
               - eza
-              - wezterm
               - rust-analyzer
             state: present
           when: distro_id in ['debian', 'ubuntu', 'linuxmint', 'pop']
