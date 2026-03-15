@@ -47,7 +47,6 @@
               - neovim
               - htop
               - hyperfine
-              - bottom
               - eza
               - gopls
               - rust-analyzer
