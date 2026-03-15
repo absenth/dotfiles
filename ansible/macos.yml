@@ -24,22 +24,22 @@
     - name: Install Homebrew formulae
       community.general.homebrew:
         name:
-          - zsh
+          - bat
+          - bob
+          - bottom
+          - eza
           - fd
           - fzf
-          - ripgrep
-          - eza
-          - bat
-          - rust-analyzer
+          - gh
+          - go
           - gopls
           - hyperfine
-          - bottom
           - nmap
           - node
-          - gh
-          - bob
-          - go
+          - ripgrep
+          - rust-analyzer
           - uv
+          - zsh
         state: present
       when: brew_check.rc == 0
 

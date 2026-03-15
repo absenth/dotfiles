@@ -17,25 +17,25 @@
     - name: Install packages
       community.general.pkgng:
         name:
-          - zsh
-          - fd
-          - ripgrep
           - bat
-          - go
-          - node
-          - gh
-          - nmap
-          - fzf
-          - git
-          - curl
-          - wget
-          - neovim
-          - htop
           - bottom
-          - hyperfine
+          - curl
           - eza
+          - fd
+          - fzf
+          - gh
+          - git
+          - go
           - gopls
+          - htop
+          - hyperfine
+          - neovim
+          - nmap
+          - node
+          - ripgrep
           - rust-analyzer
+          - wget
+          - zsh
         state: present
 
     - name: Install wezterm from ports

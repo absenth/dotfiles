@@ -31,26 +31,26 @@
         - name: Install packages (Fedora/RHEL)
           ansible.builtin.dnf:
             name:
-              - zsh
-              - bottom
-              - fd-find
-              - ripgrep
               - bat
-              - golang
-              - nodejs
-              - npm
-              - gh
-              - nmap
-              - fzf
-              - git
+              - bottom
               - curl
-              - wget
-              - neovim
+              - eza
+              - fd-find
+              - fzf
+              - gh
+              - git
+              - golang
+              - gopls
               - htop
               - hyperfine
-              - eza
-              - gopls
+              - neovim
+              - nmap
+              - nodejs
+              - npm
+              - ripgrep
               - rust-analyzer
+              - wget
+              - zsh
             state: present
           when: distro_id in ['fedora', 'rhel', 'centos', 'rocky', 'alma']
 
@@ -80,23 +80,24 @@
         - name: Install packages (Debian/Ubuntu)
           ansible.builtin.apt:
             name:
-              - zsh
-              - fd-find
-              - ripgrep
               - bat
-              - golang
-              - nodejs
-              - npm
-              - gh
-              - nmap
-              - fzf
-              - git
               - curl
-              - wget
-              - neovim
+              - eza
+              - fd-find
+              - fzf
+              - gh
+              - git
+              - golang
               - htop
               - hyperfine
-              - eza
+              - neovim
+              - nmap
+              - nodejs
+              - npm
+              - ripgrep
+              - unzip
+              - wget
+              - zsh
             state: present
           when: distro_id in ['debian', 'ubuntu', 'linuxmint', 'pop']
       when: distro_id in ['debian', 'ubuntu', 'linuxmint', 'pop'] or 'debian' in distro_id_like or 'ubuntu' in distro_id_like
@@ -107,26 +108,26 @@
         - name: Install packages (Arch)
           ansible.builtin.pacman:
             name:
-              - zsh
-              - fd
-              - ripgrep
               - bat
-              - go
-              - nodejs
-              - npm
-              - github-cli
-              - nmap
+              - bottom
+              - curl
+              - eza
+              - fd
               - fzf
               - git
-              - curl
-              - wget
-              - neovim
+              - github-cli
+              - go
               - htop
               - hyperfine
-              - bottom
-              - wezterm
-              - eza
+              - neovim
+              - nmap
+              - nodejs
+              - npm
+              - ripgrep
               - rust-analyzer
+              - wezterm
+              - wget
+              - zsh
             state: present
           when: distro_id == 'arch'
       when: distro_id == 'arch' or 'arch' in distro_id_like
@@ -142,27 +143,27 @@
         - name: Install packages (Alpine)
           community.general.apk:
             name:
-              - zsh
-              - fd
-              - ripgrep
               - bat
-              - go
-              - nodejs
-              - npm
-              - gh
-              - nmap
-              - fzf
-              - git
+              - bottom
               - curl
-              - wget
-              - neovim
+              - eza
+              - fd
+              - fzf
+              - gh
+              - git
+              - go
+              - gopls
               - htop
               - hyperfine
-              - bottom
-              - eza
-              - wezterm
-              - gopls
+              - neovim
+              - nmap
+              - nodejs
+              - npm
+              - ripgrep
               - rust-analyzer
+              - wezterm
+              - wget
+              - zsh
             state: present
           when: distro_id == 'alpine'
       when: distro_id == 'alpine' or 'alpine' in distro_id_like
