@@ -58,7 +58,7 @@
 
     - name: Change user shell to zsh
       ansible.builtin.user:
-        name: "{{ ansible_facts['user_id'] }}"
+        name: "{{ ansible_env.USER }}"
         shell: /usr/local/bin/zsh
       when: current_shell.stdout != '/usr/local/bin/zsh'
 
