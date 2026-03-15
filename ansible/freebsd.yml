@@ -65,17 +65,18 @@
       when: current_shell.stdout != '/usr/local/bin/zsh'
       ignore_errors: true
 
-    - name: Initialize rustup on FreeBSD
-      ansible.builtin.command: rustup-init --profile default --defaut-toolchain stable -y
-      failed_when: false
-      changed_when: false
-      become: false
-
     - name: Check if rustup is installed
       command: which rustup
       register: rustup_check
       changed_when: false
       failed_when: false
+      become: false
+
+    - name: Initialize rustup on FreeBSD
+      ansible.builtin.command: rustup-init --profile default --defaut-toolchain stable -y
+      when: rustup_check != 0
+      failed_when: false
+      changed_when: false
       become: false
 
     - name: Check if bob is installed
@@ -86,7 +87,7 @@
       become: false
 
     - name: Install bob
-      shell: curl -fsSL https://raw.githubusercontent.com/MordechaiHadad/bob/master/scripts/install.sh | bash
+      shell: cargo install --git https://github.com/MordechaiHadad/bob.git
       when: bob_check.rc != 0
       become: false
       ignore_errors: true
