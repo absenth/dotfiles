@@ -126,6 +126,8 @@ run_ansible_playbook() {
     VAULT_FILE="$HOME/.local/share/chezmoi/dot_ssh_private_key.vault"
     SSH_KEY="$HOME/.ssh/id_ed25519"
     SSH_KEY_PUB="$HOME/.ssh/id_ed25519.pub"
+    CURRENT_USER=$(whoami)
+    EXTRA_VARS="target_user=$CURRENT_USER"
 
     if [ -f "$VAULT_FILE" ] && [ ! -f "$SSH_KEY" ]; then
         mkdir -p "$HOME/.ssh"
@@ -144,16 +146,16 @@ run_ansible_playbook() {
     COMMON_PLAYBOOK="$CHEZMOI_ANSIBLE_DIR/common.yml"
     if [ -f "$COMMON_PLAYBOOK" ]; then
         echo "Running common Ansible playbook: $COMMON_PLAYBOOK"
-        ansible-playbook "$COMMON_PLAYBOOK"
+        ansible-playbook "$COMMON_PLAYBOOK" -e "$EXTRA_VARS"
     fi
 
     PLAYBOOK="$CHEZMOI_ANSIBLE_DIR/${OS}.yml"
     if [ -f "$PLAYBOOK" ]; then
         echo "Running Ansible playbook: $PLAYBOOK"
         if [ "$OS" = "linux" ] || [ "$OS" = "freebsd" ]; then
-            ansible-playbook "$PLAYBOOK" --ask-become-pass
+            ansible-playbook "$PLAYBOOK" --ask-become-pass -e "$EXTRA_VARS"
         else
-            ansible-playbook "$PLAYBOOK"
+            ansible-playbook "$PLAYBOOK" -e "$EXTRA_VARS"
         fi
     else
         echo "No playbook found for $OS at $PLAYBOOK"
