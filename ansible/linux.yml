@@ -123,6 +123,7 @@
               - npm
               - ripgrep
               - rust-analyzer
+              - unzip
               - wezterm
               - wget
               - zsh
