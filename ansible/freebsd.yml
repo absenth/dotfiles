@@ -57,10 +57,12 @@
         create: yes
 
     - name: Change user shell to zsh
+      become: true
       ansible.builtin.user:
         name: "{{ target_user }}"
         shell: /usr/local/bin/zsh
       when: current_shell.stdout != '/usr/local/bin/zsh'
+      ignore_errors: true
 
     - name: Check if rustup is installed
       command: which rustup
