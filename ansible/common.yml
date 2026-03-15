@@ -40,12 +40,14 @@
       args:
         creates: "{{ ansible_facts['user_dir'] }}/.ssh/id_ed25519"
       changed_when: false
+      no_log: true
 
     - name: Set SSH private key permissions
       ansible.builtin.copy:
         src: "{{ playbook_dir }}/../dot_ssh_public_key"
         dest: "{{ ansible_facts['user_dir'] }}/.ssh/id_ed25519.pub"
         mode: '0644'
+      no_log: true
 
     - name: Check if chezmoi is configured
       ansible.builtin.stat:
@@ -66,7 +68,7 @@
         - name: Convert git remote to SSH
           when: git_remote_url.stdout is search('https://github.com')
           ansible.builtin.command: >
-            git remote set-url origin 
+            git remote set-url origin
             git@github.com:absenth/dotfiles.git
           args:
             chdir: "{{ ansible_facts['user_dir'] }}/.local/share/chezmoi"
