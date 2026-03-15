@@ -191,6 +191,34 @@
       become: false
       ignore_errors: yes
 
+    - name: Check if bob is installed
+      command: which bob
+      register: bob_check
+      changed_when: false
+      failed_when: false
+      become: false
+
+    - name: Install bob
+      shell: curl -fsSL https://raw.githubusercontent.com/MordechaiHadad/bob/master/scripts/install.sh | bash
+      when: bob_check.rc != 0
+      become: false
+      ignore_errors: true
+
+    - name: Install bob nightly
+      shell: bob install nightly
+      become: false
+      ignore_errors: true
+
+    - name: Install bob stable
+      shell: bob install stable
+      become: false
+      ignore_errors: true
+
+    - name: Use bob stable
+      shell: bob use stable
+      become: false
+      ignore_errors: true
+
     - name: Check current shell
       command: echo $SHELL
       register: current_shell
