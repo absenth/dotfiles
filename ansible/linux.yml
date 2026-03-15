@@ -96,7 +96,6 @@
               - htop
               - hyperfine
               - eza
-              - rust-analyzer
             state: present
           when: distro_id in ['debian', 'ubuntu', 'linuxmint', 'pop']
       when: distro_id in ['debian', 'ubuntu', 'linuxmint', 'pop'] or 'debian' in distro_id_like or 'ubuntu' in distro_id_like
