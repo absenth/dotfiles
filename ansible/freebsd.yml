@@ -75,3 +75,31 @@
       shell: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
       when: rustup_check.rc != 0
       become: false
+
+    - name: Check if bob is installed
+      command: which bob
+      register: bob_check
+      changed_when: false
+      failed_when: false
+      become: false
+
+    - name: Install bob
+      shell: curl -fsSL https://raw.githubusercontent.com/MordechaiHadad/bob/master/scripts/install.sh | bash
+      when: bob_check.rc != 0
+      become: false
+      ignore_errors: true
+
+    - name: Install bob nightly
+      shell: ~/.local/share/bob_bin/bob install nightly
+      become: false
+      ignore_errors: true
+
+    - name: Install bob stable
+      shell: ~/.local/share/bob_bin/bob install stable
+      become: false
+      ignore_errors: true
+
+    - name: Use bob stable
+      shell: ~/.local/share/bob_bin/bob use stable
+      become: false
+      ignore_errors: true
