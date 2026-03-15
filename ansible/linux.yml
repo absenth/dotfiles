@@ -2,7 +2,6 @@
 - name: Linux Development Setup
   hosts: localhost
   connection: local
-  become: true
 
   vars_prompt:
     - name: become_password
@@ -22,6 +21,7 @@
         distro_id_like: "{{ os_release.stdout | regex_search('^ID_LIKE=.*', multiline=true) | regex_replace('^ID_LIKE=', '') | trim }}"
 
     - name: Install packages on Fedora/RHEL
+      become: true
       block:
         - name: Update dnf cache
           ansible.builtin.dnf:
@@ -70,6 +70,7 @@
       when: distro_id in ['fedora', 'rhel', 'centos', 'rocky', 'alma'] or 'rhel' in distro_id_like
 
     - name: Install packages on Debian/Ubuntu
+      become: true
       block:
         - name: Update apt cache
           ansible.builtin.apt:
@@ -101,6 +102,7 @@
       when: distro_id in ['debian', 'ubuntu', 'linuxmint', 'pop'] or 'debian' in distro_id_like or 'ubuntu' in distro_id_like
 
     - name: Install packages on Arch Linux
+      become: true
       block:
         - name: Install packages (Arch)
           ansible.builtin.pacman:
@@ -130,6 +132,7 @@
       when: distro_id == 'arch' or 'arch' in distro_id_like
 
     - name: Install packages on Alpine Linux
+      become: true
       block:
         - name: Update apk cache
           community.general.apk:
