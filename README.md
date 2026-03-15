@@ -62,4 +62,5 @@ Testing has only been performed on:
 - ArchLinux
 - Fedora 42
 - FreeBSD 14 - problems with bob, but otherwise mostly working
+- MacOS 26.3 - Brew install tasks shouldn't run if packages are already present.  #FIXME
 - Ubuntu 24.04
