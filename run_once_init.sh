@@ -123,6 +123,24 @@ install_ansible() {
 
 run_ansible_playbook() {
     CHEZMOI_ANSIBLE_DIR="$HOME/.local/share/chezmoi/ansible"
+    VAULT_FILE="$HOME/.local/share/chezmoi/dot_ssh_private_key.vault"
+    SSH_KEY="$HOME/.ssh/id_ed25519"
+    SSH_KEY_PUB="$HOME/.ssh/id_ed25519.pub"
+
+    if [ -f "$VAULT_FILE" ] && [ ! -f "$SSH_KEY" ]; then
+        mkdir -p "$HOME/.ssh"
+        chmod 700 "$HOME/.ssh"
+        echo "Decrypting SSH private key..."
+        ansible-vault decrypt "$VAULT_FILE" --output "$SSH_KEY"
+        chmod 600 "$SSH_KEY"
+    fi
+
+    if [ -f "$HOME/.local/share/chezmoi/dot_ssh_public_key" ] && [ ! -f "$SSH_KEY_PUB" ]; then
+        mkdir -p "$HOME/.ssh"
+        cp "$HOME/.local/share/chezmoi/dot_ssh_public_key" "$SSH_KEY_PUB"
+        chmod 644 "$SSH_KEY_PUB"
+    fi
+
     COMMON_PLAYBOOK="$CHEZMOI_ANSIBLE_DIR/common.yml"
     if [ -f "$COMMON_PLAYBOOK" ]; then
         echo "Running common Ansible playbook: $COMMON_PLAYBOOK"

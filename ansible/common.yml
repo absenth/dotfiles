@@ -4,11 +4,6 @@
   connection: local
   become: false
 
-  vars_prompt:
-    - name: vault_password
-      prompt: "Enter vault password to decrypt SSH keys"
-      private: yes
-
   tasks:
     - name: Create ~/.bin directory
       ansible.builtin.file:
@@ -27,27 +22,6 @@
         path: "{{ ansible_facts['user_dir'] }}/src"
         state: directory
         mode: '0755'
-
-    - name: Create ~/.ssh directory
-      ansible.builtin.file:
-        path: "{{ ansible_facts['user_dir'] }}/.ssh"
-        state: directory
-        mode: '0700'
-
-    - name: Decrypt SSH private key
-      ansible.builtin.shell: |
-        echo '{{ vault_password }}' | ansible-vault decrypt {{ playbook_dir }}/../dot_ssh_private_key.vault --vault-password-file - --output {{ ansible_facts['user_dir'] }}/.ssh/id_ed25519
-      args:
-        creates: "{{ ansible_facts['user_dir'] }}/.ssh/id_ed25519"
-      changed_when: false
-      no_log: true
-
-    - name: Set SSH private key permissions
-      ansible.builtin.copy:
-        src: "{{ playbook_dir }}/../dot_ssh_public_key"
-        dest: "{{ ansible_facts['user_dir'] }}/.ssh/id_ed25519.pub"
-        mode: '0644'
-      no_log: true
 
     - name: Check if chezmoi is configured
       ansible.builtin.stat:
