@@ -35,7 +35,6 @@
               - fd-find
               - ripgrep
               - bat
-              - rust
               - golang
               - nodejs
               - npm
@@ -84,7 +83,6 @@
               - fd-find
               - ripgrep
               - bat
-              - rust
               - golang
               - nodejs
               - npm
@@ -100,6 +98,7 @@
               - bottom
               - eza
               - wezterm
+              - rust-analyzer
             state: present
           when: distro_id in ['debian', 'ubuntu', 'linuxmint', 'pop']
       when: distro_id in ['debian', 'ubuntu', 'linuxmint', 'pop'] or 'debian' in distro_id_like or 'ubuntu' in distro_id_like
@@ -113,7 +112,6 @@
               - fd
               - ripgrep
               - bat
-              - rust
               - go
               - nodejs
               - npm
@@ -129,6 +127,7 @@
               - bottom
               - wezterm
               - eza
+              - rust-analyzer
             state: present
           when: distro_id == 'arch'
       when: distro_id == 'arch' or 'arch' in distro_id_like
@@ -147,7 +146,6 @@
               - fd
               - ripgrep
               - bat
-              - rust
               - go
               - nodejs
               - npm

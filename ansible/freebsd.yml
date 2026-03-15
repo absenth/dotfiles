@@ -21,7 +21,6 @@
           - fd
           - ripgrep
           - bat
-          - rust
           - go
           - node
           - gh
