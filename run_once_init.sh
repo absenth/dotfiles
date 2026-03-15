@@ -150,7 +150,11 @@ run_ansible_playbook() {
     PLAYBOOK="$CHEZMOI_ANSIBLE_DIR/${OS}.yml"
     if [ -f "$PLAYBOOK" ]; then
         echo "Running Ansible playbook: $PLAYBOOK"
-        ansible-playbook "$PLAYBOOK"
+        if [ "$OS" = "linux" ] || [ "$OS" = "freebsd" ]; then
+            ansible-playbook "$PLAYBOOK" --ask-become-pass
+        else
+            ansible-playbook "$PLAYBOOK"
+        fi
     else
         echo "No playbook found for $OS at $PLAYBOOK"
         exit 1
