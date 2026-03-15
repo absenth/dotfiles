@@ -1,7 +1,5 @@
 #!/usr/bin/env sh
 
-SCRIPT_DIR="$(dirname "$0")"
-
 detect_os() {
     case "$(uname -s)" in
         Darwin*)
