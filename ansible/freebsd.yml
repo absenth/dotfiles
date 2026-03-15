@@ -11,9 +11,8 @@
 
   tasks:
     - name: Update package repository
-      community.general.pkgng:
-        name: "*"
-        update_cache: yes
+      ansible.builtin.shell:
+        cmd: pkg update
 
     - name: Install packages
       community.general.pkgng:
