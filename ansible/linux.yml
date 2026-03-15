@@ -205,17 +205,17 @@
       ignore_errors: true
 
     - name: Install bob nightly
-      shell: bob install nightly
+      shell: ~/.local/share/bob_bin/bob install nightly
       become: false
       ignore_errors: true
 
     - name: Install bob stable
-      shell: bob install stable
+      shell: ~/.local/share/bob_bin/bob install stable
       become: false
       ignore_errors: true
 
     - name: Use bob stable
-      shell: bob use stable
+      shell: ~/.local/share/bob_bin/bob use stable
       become: false
       ignore_errors: true
 
